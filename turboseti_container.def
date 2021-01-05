@@ -3,9 +3,8 @@ From: ubuntu:18.04
 
 %environment
 # Export environment variables here. The following required for CUDA:
-export CUDA_PATH="/usr/local/cuda-10.2"
-export PATH=/usr/local/cuda-10.2/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export PATH=/usr/local/cuda-10.1/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 %post
 apt-get -y install build-essential
@@ -27,20 +26,22 @@ python3 -m pip install -U "dask[bag]"
 python3 -m pip install -U https://github.com/UCBerkeleySETI/blimpy/tarball/master
 
 # CUDA
+# Install the earliest possible CUDA toolkit to maximise compatibility
+# with drivers (see Table 1 here: https://docs.nvidia.com/deploy/cuda-compatibility/index.html)
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
 mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
-wget https://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda-repo-ubuntu1804-10-2-local-10.2.89-440.33.01_1.0-1_amd64.deb
-dpkg -i cuda-repo-ubuntu1804-10-2-local-10.2.89-440.33.01_1.0-1_amd64.deb
-apt-key add /var/cuda-repo-10-2-local-10.2.89-440.33.01/7fa2af80.pub
+wget https://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda-repo-ubuntu1804-10-1-local-10.1.243-418.87.00_1.0-1_amd64.deb
+dpkg -i cuda-repo-ubuntu1804-10-1-local-10.1.243-418.87.00_1.0-1_amd64.deb
+apt-key add /var/cuda-repo-10-1-local-10.1.243-418.87.00/7fa2af80.pub
 add-apt-repository universe
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install cuda -y
 
 # Fix libcublas location issue
-ln -s /usr/lib/x86_64-linux-gnu/libcublas* /usr/local/cuda-10.2/lib64/ 
+ln -s /usr/lib/x86_64-linux-gnu/libcublas* /usr/local/cuda-10.1/lib64/ 
 
 # CuPy
-pip install cupy-cuda110
+pip install cupy-cuda101
 
 # TurboSETI (latest)
 git clone https://github.com/UCBerkeleySETI/turbo_seti.git

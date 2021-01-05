@@ -10,6 +10,8 @@ A Singularity container can be built from a [definition file](https://sylabs.io/
 sudo singularity build turboseti_container.sif turboseti_container.def   
 ```
 
+The container itself is roughly 6.7GB. 
+
 Note that the CUDA drivers on the host system must be compatible with the CUDA toolkit version installed in the container (as specified in the definitions file). This can be confirmed by checking the [compatibility table](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) (Table 2 in the document linked).
 
 The container can be accessed via a shell as follows:  
@@ -29,3 +31,4 @@ TurboSETI may also be run from within the container via the external commandline
 ```
 singularity exec -B ~/example_data --nv turboseti_container.sif turboSETI ~/example_data/diced_Parkes_57941_12846_HIP33499_S_fine.h5 -g y
 ```
+
